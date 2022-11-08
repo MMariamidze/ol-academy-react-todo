@@ -16,94 +16,97 @@ const TodoApp = () => {
   const [showEditor, setshowEditor] = useState(false);
 
   const addNewTodo = (text) => {
-    setTodos((prevState) => {
-      return [
-        ...prevState,
-        { id: Math.random(), title: text, isDone: false, isChecked: false },
-      ];
-    });
+    setTodos((prevState) => [
+      ...prevState,
+      {
+        id: Math.round(Math.random() * 100),
+        title: text,
+        isDone: false,
+        isChecked: false,
+      },
+    ]);
   };
 
   const handelDeleteTodoItem = (todoid) => {
-    setTodos({ items: todos.filter((id) => id !== todoid) });
+    setTodos(todos.filter(({ id }) => id !== todoid));
   };
 
   const handelEditTodoItem = (id) => {
-    setcurrentTodo(id);
+    todos.forEach((todo) => {
+      if (todo.id === id) {
+        setcurrentTodo(todo);
+      }
+    });
     setshowEditor(true);
   };
 
   const handelUpdateTodoItem = (text) => {
-    const updatedtodo = {
-      id: setcurrentTodo,
-      title: text,
-      isDone: setcurrentTodo.isDone,
-      isChecked: false,
-    };
-
-    setTodos({
-      items: this.state.items.map((todo) => {
-        if (todo.id === updatedtodo.id) {
-          return updatedtodo;
-        }
-        return todo;
-      }),
-      showEditor: false,
+    todos.forEach((todo) => {
+      if (todo.id === currentTodo.id) {
+        todo.title = text;
+      }
     });
+    setTodos(todos);
+    setshowEditor(false);
   };
 
-  const handleMarkedTodoItem = (id, param) => {
-    const newItems = this.state.items.map((item) => {
-      if (item.id === id) {
+  const handleMarkedTodoItem = (todoid, param) => {
+    // console.log(todoid, param);
+    todos.forEach((todo) => {
+      // console.log(todo, "todo");
+      if (todo.id === todoid) {
+        // console.log(todo.id, todoid, todos);
         if (param === "isChecked") {
-          item.isChecked = !item.isChecked;
+          todo.isChecked = !todo.isChecked;
+          console.log(todo);
         }
         if (param === "isDone") {
-          item.isDone = !item.isDone;
+          todo.isDone = !todo.isDone;
+          // console.log(todo, todo.isDone);
         }
       }
-      return item;
+      // console.log(data, "ragaca");
     });
-    this.setState({ items: newItems });
+    // const todosCopy = [...todos];
+    // setTodos(todosCopy);
+    setTodos((prevState) => [...prevState]);
   };
 
   const handelDeleteAll = () => {
-    this.setState({ items: [] });
+    setTodos([]);
   };
 
   const handelDeleteDone = () => {
-    this.setState({
-      items: this.state.items.filter((item) => item.isDone !== true),
-    });
+    setTodos(todos.filter(({ isDone }) => !isDone));
   };
   const handelDeleteChecked = () => {
-    this.setState({
-      items: this.state.items.filter((item) => item.isChecked !== true),
-    });
+    setTodos(todos.filter(({ isChecked }) => !isChecked));
+    console.log(todos);
   };
 
   return (
     <div className="card custom-card">
       <div className="card-body custom- body">
         <h1 className="card-title custom-title"> To Do List</h1>
-
-        <Form liftTextUp={this.addNewTodo} />
-        {this.state.showEditor && (
+        <Form liftTextUp={addNewTodo} />
+        {showEditor && (
           <EditorForm
-            handelUpdateTodoItem={this.handelUpdateTodoItem}
-            value={this.state.currentTodo.title}
+            handelUpdateTodoItem={handelUpdateTodoItem}
+            value={currentTodo}
           />
         )}
         <ul className="custom-ul">
-          {this.state.items.map((item) => (
+          {todos.map(({ id, title, isDone }) => (
             <TodoItem
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              handelDeleteTodoItem={this.handelDeleteTodoItem}
-              handelEditTodoItem={this.handelEditTodoItem}
-              handleMarkedTodoItem={this.handleMarkedTodoItem}
-              checked={item.isDone}
+              key={id}
+              id={id}
+              title={title}
+              handelDeleteTodoItem={handelDeleteTodoItem}
+              handelEditTodoItem={handelEditTodoItem}
+              handleMarkedTodoItem={handleMarkedTodoItem}
+              isDone={isDone}
+              todos={todos}
+              setTodos={setTodos}
             />
           ))}
         </ul>

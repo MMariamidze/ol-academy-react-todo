@@ -1,42 +1,37 @@
 import "./Form.css";
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-class Form extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { text: "" };
-  }
+const Form = ({ liftTextUp }) => {
+  const [input, setInput] = useState("");
 
-  handleChange = (e) => {
-    this.setState({ text: e.target.value });
+  const handleChange = (e) => {
+    setInput(e.target.value);
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    this.props.liftTextUp(this.state.text);
-    this.setState({ text: "" });
+    liftTextUp(input);
+    setInput("");
   };
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label className="custom-label" htmlFor="new-todo">
-            Tasks:{" "}
-          </label>
-          <input
-            className="custom-input"
-            id="new-todo"
-            onChange={this.handleChange}
-            value={this.state.text}
-          />
-          <button className="btn btn-outline-success" type="submit">
-            Add
-          </button>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label className="custom-label" htmlFor="new-todo">
+          Tasks:{" "}
+        </label>
+        <input
+          className="custom-input"
+          id="new-todo"
+          onChange={handleChange}
+          value={input}
+        />
+        <button className="btn btn-outline-success" type="submit">
+          Add
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default Form;

@@ -1,41 +1,40 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./Form.css";
 
-class EditorForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { inputValue: props.value };
-  }
+const EditorForm = ({ handelUpdateTodoItem, value }) => {
+  // console.log(value);
+  const [input, setInput] = useState(value.title);
 
-  handleChange = (e) => {
-    this.setState({ inputValue: e.target.value });
+  const handleChange = (e) => {
+    setInput(e.target.value);
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    this.props.handelUpdateTodoItem(this.state.inputValue);
+    console.log(input, "input");
+    if (!input) return;
+    setInput("");
+    handelUpdateTodoItem(input);
   };
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label className="custom-label" htmlFor="new-todo">
-            Tasks:{" "}
-          </label>
-          <input
-            className="custom-input"
-            id="new-todo"
-            onChange={this.handleChange}
-            value={this.state.inputValue}
-          />
-          <button className="btn btn-outline-warning" type="submit">
-            update
-          </button>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label className="custom-label" htmlFor="new-todo">
+          Tasks:{" "}
+        </label>
+        <input
+          className="custom-input"
+          id="new-todo"
+          onChange={handleChange}
+          value={input}
+        />
+        <button className="btn btn-outline-warning" type="submit">
+          update
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default EditorForm;
