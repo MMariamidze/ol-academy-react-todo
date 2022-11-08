@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./Form.css";
 
 const EditorForm = ({ handelUpdateTodoItem, value }) => {
-  // console.log(value);
   const [input, setInput] = useState(value.title);
 
   const handleChange = (e) => {
@@ -11,7 +10,6 @@ const EditorForm = ({ handelUpdateTodoItem, value }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(input, "input");
     if (!input) return;
     setInput("");
     handelUpdateTodoItem(input);

@@ -1,7 +1,7 @@
 import "./Form.css";
 import React, { useState } from "react";
 
-const Form = ({ liftTextUp }) => {
+const Form = ({ liftTextUp, showError }) => {
   const [input, setInput] = useState("");
 
   const handleChange = (e) => {
@@ -20,6 +20,7 @@ const Form = ({ liftTextUp }) => {
         <label className="custom-label" htmlFor="new-todo">
           Tasks:{" "}
         </label>
+        {showError && <h1>{showError.message}</h1>}
         <input
           className="custom-input"
           id="new-todo"

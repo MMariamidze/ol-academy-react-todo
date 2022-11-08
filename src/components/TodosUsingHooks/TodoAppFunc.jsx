@@ -14,17 +14,26 @@ const TodoApp = () => {
   const [todos, setTodos] = useState(data);
   const [currentTodo, setcurrentTodo] = useState(null);
   const [showEditor, setshowEditor] = useState(false);
+  const [showError, setShowError] = useState("");
 
   const addNewTodo = (text) => {
-    setTodos((prevState) => [
-      ...prevState,
-      {
-        id: Math.round(Math.random() * 100),
-        title: text,
-        isDone: false,
-        isChecked: false,
-      },
-    ]);
+    const itemExists = todos.find(
+      ({ title }) =>
+        title.trim().toLocaleLowerCase() === text.trim().toLocaleLowerCase()
+    );
+
+    if (!itemExists) {
+      setTodos((prevState) => [
+        ...prevState,
+        {
+          id: Math.round(Math.random() * 100),
+          title: text.trim(),
+          isDone: false,
+          isChecked: false,
+        },
+      ]);
+      setShowError("");
+    } else setShowError(new Error("Same task already exists"));
   };
 
   const handelDeleteTodoItem = (todoid) => {
@@ -51,24 +60,17 @@ const TodoApp = () => {
   };
 
   const handleMarkedTodoItem = (todoid, param) => {
-    // console.log(todoid, param);
     todos.forEach((todo) => {
-      // console.log(todo, "todo");
       if (todo.id === todoid) {
-        // console.log(todo.id, todoid, todos);
         if (param === "isChecked") {
           todo.isChecked = !todo.isChecked;
-          console.log(todo);
         }
         if (param === "isDone") {
           todo.isDone = !todo.isDone;
-          // console.log(todo, todo.isDone);
         }
       }
-      // console.log(data, "ragaca");
     });
-    // const todosCopy = [...todos];
-    // setTodos(todosCopy);
+
     setTodos((prevState) => [...prevState]);
   };
 
@@ -81,14 +83,13 @@ const TodoApp = () => {
   };
   const handelDeleteChecked = () => {
     setTodos(todos.filter(({ isChecked }) => !isChecked));
-    console.log(todos);
   };
 
   return (
     <div className="card custom-card">
       <div className="card-body custom- body">
         <h1 className="card-title custom-title"> To Do List</h1>
-        <Form liftTextUp={addNewTodo} />
+        <Form liftTextUp={addNewTodo} showError={showError} />
         {showEditor && (
           <EditorForm
             handelUpdateTodoItem={handelUpdateTodoItem}
