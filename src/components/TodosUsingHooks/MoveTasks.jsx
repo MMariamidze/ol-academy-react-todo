@@ -10,13 +10,12 @@ const MoveTasks = ({ id, todos, setTodos }) => {
       : indexOfCurrentElement + 1;
     if (indexOfMovedElement === -1) {
       return;
-    } else {
-      const newArray = todos.filter((item) => {
-        return todos.indexOf(item) !== indexOfCurrentElement;
-      });
-      newArray.splice(indexOfMovedElement, 0, currentElement);
-      setTodos(newArray);
     }
+    const newArray = todos.filter((item) => {
+      return todos.indexOf(item) !== indexOfCurrentElement;
+    });
+    newArray.splice(indexOfMovedElement, 0, currentElement);
+    setTodos(newArray);
   };
 
   return (

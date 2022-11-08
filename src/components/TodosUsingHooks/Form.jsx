@@ -4,8 +4,8 @@ import React, { useState } from "react";
 const Form = ({ liftTextUp, showError }) => {
   const [input, setInput] = useState("");
 
-  const handleChange = (e) => {
-    setInput(e.target.value);
+  const handleChange = ({ target }) => {
+    setInput(target.value);
   };
 
   const handleSubmit = (e) => {

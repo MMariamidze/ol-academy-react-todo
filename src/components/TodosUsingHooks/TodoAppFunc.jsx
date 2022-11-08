@@ -50,17 +50,28 @@ const TodoApp = () => {
   };
 
   const handelUpdateTodoItem = (text) => {
-    todos.forEach((todo) => {
+    const itemExists = todos.find(
+      ({ title }) =>
+        title.trim().toLocaleLowerCase() === text.trim().toLocaleLowerCase()
+    );
+    if (itemExists) {
+      setShowError(new Error("Same task already exists"));
+      return;
+    }
+    setShowError("");
+    const updatedTodos = [...todos];
+    updatedTodos.forEach((todo) => {
       if (todo.id === currentTodo.id) {
         todo.title = text;
       }
     });
-    setTodos(todos);
+    setTodos(updatedTodos);
     setshowEditor(false);
   };
 
   const handleMarkedTodoItem = (todoid, param) => {
-    todos.forEach((todo) => {
+    const updatedTodos = [...todos];
+    updatedTodos.forEach((todo) => {
       if (todo.id === todoid) {
         if (param === "isChecked") {
           todo.isChecked = !todo.isChecked;
@@ -71,7 +82,7 @@ const TodoApp = () => {
       }
     });
 
-    setTodos((prevState) => [...prevState]);
+    setTodos(updatedTodos);
   };
 
   const handelDeleteAll = () => {

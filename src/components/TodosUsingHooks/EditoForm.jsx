@@ -4,8 +4,8 @@ import "./Form.css";
 const EditorForm = ({ handelUpdateTodoItem, value }) => {
   const [input, setInput] = useState(value.title);
 
-  const handleChange = (e) => {
-    setInput(e.target.value);
+  const handleChange = ({ target }) => {
+    setInput(target.value);
   };
 
   const handleSubmit = (e) => {
