@@ -18,3 +18,9 @@
 .custom-li {
   color: #ffff;
 }
+.task {
+  color: white;
+}
+.done {
+  color: green;
+}

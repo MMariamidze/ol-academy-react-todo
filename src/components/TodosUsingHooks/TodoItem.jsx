@@ -22,8 +22,8 @@ const TodoItem = ({
           onChange={() => handleMarkedTodoItem(id, "isChecked")}
         />
         <div>
-          {isDone && <h1 style={{ color: "lime" }}>{title}</h1>}
-          {!isDone && <h1 style={{ color: "tomato" }}>{title}</h1>}
+          {isDone && <h1 className="done">{title}</h1>}
+          {!isDone && <h1 className="task">{title}</h1>}
         </div>
 
         <button

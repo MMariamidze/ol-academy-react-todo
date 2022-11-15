@@ -6,3 +6,7 @@
 .custom-label {
   color: #fff;
 }
+h1 {
+  color: red;
+  font-weight: 600;
+}

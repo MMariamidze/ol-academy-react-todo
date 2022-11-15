@@ -15,7 +15,11 @@ class TodoItem extends Component {
               this.props.handleMarkedTodoItem(this.props.id, "isChecked")
             }
           />
-          {this.props.title}
+          <div>
+            {this.props.isDone && <h1 className="done">{this.props.title}</h1>}
+            {!this.props.isDone && <h1 className="task">{this.props.title}</h1>}
+          </div>
+          {/* {this.props.title} */}
           <button
             className="btn btn-outline-danger"
             onClick={() => this.props.handelDeleteTodoItem(this.props.id)}
@@ -35,6 +39,18 @@ class TodoItem extends Component {
             }
           >
             Done
+          </button>
+          <button
+            className="btn btn-outline-warning"
+            onClick={() => this.props.handleUp(this.props.item)}
+          >
+            up
+          </button>
+          <button
+            className="btn btn-outline-warning"
+            onClick={() => this.props.handleDown(this.props.item)}
+          >
+            down
           </button>
         </li>
       </div>

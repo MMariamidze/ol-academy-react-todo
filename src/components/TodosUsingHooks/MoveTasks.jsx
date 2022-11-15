@@ -19,7 +19,7 @@ const MoveTasks = ({ id, todos, setTodos }) => {
   };
 
   return (
-    <div className="up-down-buttons">
+    <div>
       <button
         className="btn btn-outline-warning"
         onClick={() => onMoveHandler(true)}

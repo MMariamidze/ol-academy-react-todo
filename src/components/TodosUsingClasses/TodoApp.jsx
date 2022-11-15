@@ -13,16 +13,37 @@ const data = [
 class TodoApp extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { items: data, currentTodo: {}, showEditor: false };
+    this.state = {
+      items: data,
+      currentTodo: {},
+      showEditor: false,
+      showError: false,
+    };
   }
 
   addNewTodo = (text) => {
-    this.setState((prevState) => ({
-      items: [
-        ...prevState.items,
-        { id: Math.random(), title: text, isDone: false, isChecked: false },
-      ],
-    }));
+    const itemExists = this.state.items.find(
+      ({ title }) =>
+        title.trim().toLocaleLowerCase() === text.trim().toLocaleLowerCase()
+    );
+    if (!itemExists) {
+      this.setState((prevState) => ({
+        items: [
+          ...prevState.items,
+          {
+            id: Math.random() * 100,
+            title: text.trim(),
+            isDone: false,
+            isChecked: false,
+          },
+        ],
+        showError: false,
+      }));
+    } else {
+      this.setState({
+        showError: true && alert("this todo already exists, enter another !"),
+      });
+    }
   };
 
   handelDeleteTodoItem = (id) => {
@@ -43,16 +64,26 @@ class TodoApp extends React.Component {
       isDone: this.state.currentTodo.isDone,
       isChecked: false,
     };
-
-    this.setState({
-      items: this.state.items.map((todo) => {
-        if (todo.id === updatedtodo.id) {
-          return updatedtodo;
-        }
-        return todo;
-      }),
-      showEditor: false,
-    });
+    const itemExists = this.state.items.find(
+      ({ title }) =>
+        title.trim().toLocaleLowerCase() === text.trim().toLocaleLowerCase()
+    );
+    if (!itemExists) {
+      this.setState({
+        items: this.state.items.map((todo) => {
+          if (todo.id === updatedtodo.id) {
+            return updatedtodo;
+          }
+          return todo;
+        }),
+        showEditor: false,
+        showError: false,
+      });
+    } else {
+      this.setState({
+        showError: true && alert("this todo already exists, enter another !"),
+      });
+    }
   };
 
   handleMarkedTodoItem = (id, param) => {
@@ -84,6 +115,34 @@ class TodoApp extends React.Component {
       items: this.state.items.filter((item) => item.isChecked !== true),
     });
   };
+  handleUp = (todo) => {
+    let myTodos = this.state.items;
+    let currentTodoIndex = myTodos.indexOf(todo);
+    if (currentTodoIndex !== 0) {
+      let wantedTodoIndex = currentTodoIndex - 1;
+      let tempRemovedTodo = myTodos.splice(
+        wantedTodoIndex,
+        1,
+        myTodos[currentTodoIndex]
+      );
+      myTodos[currentTodoIndex] = tempRemovedTodo[0];
+    }
+    this.setState({ items: myTodos });
+  };
+  handleDown = (todo) => {
+    let myTodos = this.state.items;
+    let currentTodoIndex = myTodos.indexOf(todo);
+    if (currentTodoIndex !== myTodos.length - 1) {
+      let wantedTodoIndex = currentTodoIndex + 1;
+      let tempRemovedTodo = myTodos.splice(
+        wantedTodoIndex,
+        1,
+        myTodos[currentTodoIndex]
+      );
+      myTodos[currentTodoIndex] = tempRemovedTodo[0];
+    }
+    this.setState({ items: myTodos });
+  };
 
   render() {
     return (
@@ -108,6 +167,10 @@ class TodoApp extends React.Component {
                 handelEditTodoItem={this.handelEditTodoItem}
                 handleMarkedTodoItem={this.handleMarkedTodoItem}
                 checked={item.isDone}
+                handleUp={this.handleUp}
+                handleDown={this.handleDown}
+                isDone={item.isDone}
+                item={item}
               />
             ))}
           </ul>
